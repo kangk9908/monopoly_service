@@ -90,7 +90,7 @@ function readPlayer(req, res, next) {
 }
 
 function readPlayerScore(req, res, next) {
-    db.many("SELECT score FROM Player, PlayerGame WHERE Player.ID = PlayerGame.playerID AND Player.name = 'Dogbreath")
+    db.many('SELECT score FROM Player, PlayerGame WHERE Player.ID = PlayerGame.playerID AND Player.name = ${name}', req.params)
     .then(data => {
         res.send(data);
     })
