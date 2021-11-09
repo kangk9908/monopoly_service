@@ -39,7 +39,8 @@ router.use(express.json());
 router.get("/", readHelloMessage);
 router.get("/players", readPlayers);
 router.get("/players/:id", readPlayer);
-router.get("/:name", readPlayerScore)
+// view player personal record
+router.get("/players/:id/pr", readPlayerPR)
 router.put("/players/:id", updatePlayer);
 router.post('/players', createPlayer);
 router.delete('/players/:id', deletePlayer);
@@ -89,8 +90,8 @@ function readPlayer(req, res, next) {
         });
 }
 
-function readPlayerScore(req, res, next) {
-    db.many('SELECT score FROM Player, PlayerGame WHERE Player.ID = PlayerGame.playerID AND Player.name = ${name}', req.params)
+function readPlayerPR(req, res, next) {
+    db.many("SELECT MAX(score) FROM Player, PlayerGame WHERE Player.ID = PlayerGame.playerID AND Player.ID = ${id} GROUP BY Player.ID, PlayerGame.playerID", req.params)
     .then(data => {
         res.send(data);
     })
